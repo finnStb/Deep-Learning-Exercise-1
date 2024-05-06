@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Image Classification</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="styles/custom-styles.css" rel="stylesheet" />
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="pt-20"></div> <!-- height of fixed navigation bar -->
+
+  <!-- Navigation bar -->
+  <nav class="fixed top-0 w-full z-50 bg-purple-500 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between">
+        <div class="flex space-x-4">
+          <!-- Logo -->
+          <a class="flex items-center py-2 px-1">
+            <img src="resources/logo.png" alt="Logo" class="h-16 w-16" />
+          </a>
+          <!-- Navigation links for large screens -->
+          <div class="hidden md:flex items-center space-x-1">
+            <a href="#examples"
+              class="nav-link py-3 px-3 font-semibold text-white hover:bg-purple-600 relative active rounded-xl">Examples</a>
+            <div class="border-r border-gray-200 h-6 my-auto"></div>
+            <a href="#try-yourself"
+              class="nav-link py-3 px-3 font-semibold text-white hover:bg-purple-600 relative rounded-xl">Try
+              Yourself</a>
+            <div class="border-r border-gray-200 h-6 my-auto"></div>
+            <a href="#documentation"
+              class="nav-link py-3 px-3 font-semibold text-white hover:bg-purple-600 relative rounded-xl">Documentation</a>
+          </div>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button class="mobile-menu-button" aria-label="Toggle Navigation">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu, hidden on larger screens -->
+  <div class="fixed top-20 w-full z-50 hidden md:flex items-center justify-end space-x-1 bg-purple-400"
+    id="mobile-menu">
+    <a href="#examples"
+      class="nav-link py-3 px-3 text-white font-bold hover:bg-purple-500 relative active rounded-xl justify-end">Examples</a>
+    <div class="border-r border-gray-200 my-auto"></div>
+    <a href="#try-yourself"
+      class="nav-link py-3 px-3 text-white font-bold hover:bg-purple-500 relative rounded-xl justify-end">Try
+      Yourself</a>
+    <div class="border-r border-gray-200 my-auto"></div>
+    <a href="#documentation"
+      class="nav-link py-3 px-3 text-white font-bold hover:bg-purple-500 relative rounded-xl justify-end">Documentation</a>
+  </div>
+
+  <!-- Main heading -->
+  <h1
+    class="text-3xl lg:text-3xl font-bold text-gray-800 shadow-md p-5 rounded-lg bg-white border-purple-500 border-l-8">
+    Image Classification using ml5 MobileNet
+  </h1>
+
+  <!-- Examples Section -->
+  <div id="examples" class="mt-4">
+    <h2 class="text-2xl text-purple-600 font-bold my-4 mx-auto px-4">
+      Examples 🔍
+    </h2>
+    <p class="standard-text">
+      The following examples show how the MobileNet model classifies
+      different images. The model may not be able to correctly classify
+      images that have categories that ImageNet was not trained on or that
+      are not similar enough to the images that ImageNet is trained with.
+    </p>
+
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example containers -->
+    <!-- Example 1 (Correctly classified) -->
+    <div id="result-container-1" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-1" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/y_bubble.jpg" alt="Example Image 1"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-indigo-700 font-bold">
+          ✓ Correct Classification
+        </p>
+      </div>
+      <div id="chart-container-1" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-1" class="pie-chart justify-start"></div>
+      </div>
+    </div>
+
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example 2 (Correctly classified) -->
+    <div id="result-container-2" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-2" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/y_wolf.jpg" alt="Example Image 2"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-indigo-700 font-bold">
+          ✓ Correct Classification
+        </p>
+      </div>
+      <div id="chart-container-2" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-2" class="pie-chart justify-start"></div>
+      </div>
+    </div>
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example 3 (Correctly classified) -->
+    <div id="result-container-3" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-3" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/y_fox.png" alt="Example Image 3"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-indigo-700 font-bold">
+          ✓ Correct Classification
+        </p>
+      </div>
+      <div id="chart-container-3" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-3" class="pie-chart justify-start"></div>
+      </div>
+    </div>
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example 4 (incorrectly classified) -->
+    <div id="result-container-4" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-4" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/x_swan.jpg" alt="Example Image 4"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-red-700 font-bold">
+          ✘ Incorrect Classification
+        </p>
+      </div>
+      <div id="chart-container-4" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-4" class="pie-chart justify-center"></div>
+      </div>
+    </div>
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example 5 (incorrectly classified) -->
+    <div id="result-container-5" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-5" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/x_bananas.jpg" alt="Example Image 5"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-red-700 font-bold">
+          ✘ Incorrect Classification
+        </p>
+      </div>
+      <div id="chart-container-5" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-5" class="pie-chart justify-center"></div>
+      </div>
+    </div>
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Example 6 (incorrectly classified) -->
+    <div id="result-container-6" class="example-container mb-6 p-6 text-center rounded-xl flex">
+      <div id="image-container-6" class="mx-auto w-full max-w-xs max-h-xs justify-start">
+        <img src="images/x_airplane.jpg" alt="Example Image 6"
+          class="w-full max-w-xs max-h-xs rounded shadow-md justify-center" />
+        <p class="text-center text-red-700 font-bold">
+          ✘ Incorrect Classification
+        </p>
+      </div>
+      <div id="chart-container-6" class="flex-1 flex items-center">
+        <div class="loader ml-32" style="display: none"></div>
+        <div id="chart-6" class="pie-chart justify-center"></div>
+      </div>
+    </div>
+
+    <hr class="border-gray-300 my-4" />
+
+    <!-- Discussion Section -->
+    <h2 class="text-2xl font-semibold text-gray-700 mt-6 my-4 mx-auto px-4">
+      Results Discussion 💡
+    </h2>
+    <div class="px-4 py-5 sm:px-6 bg-gray-100 shadow-sm rounded-lg">
+      <ul class="list-disc list-inside text-gray-600 space-y-2">
+        <li>
+          <strong>Bubble:</strong> Correctly classified with a high
+          confidence thanks to the clear depiction on a dark background.
+        </li>
+        <li>
+          <strong>Wolf:</strong> Despite correct classification as timber
+          wolf, uncertainty due to similar categories, indicating the subtle
+          differences between related species.
+        </li>
+        <li>
+          <strong>Red fox:</strong> Correctly classified, but with low
+          confidence, which was probably affected by the frontal view
+          without showing the whole body.
+        </li>
+        <li>
+          <strong>Swan:</strong> Misclassified as American egret as swans
+          were not in the training set, an example of the limitations of the
+          model due to the dataset.
+        </li>
+        <li>
+          <strong>Banana:</strong> Misclassified as zucchini; the grouping
+          probably led to confusion, although banana was still recognised as
+          a second option.
+        </li>
+        <li>
+          <strong>Passenger plane:</strong> Incorrectly classified as a
+          military plane, probably influenced by the dark plane colour in
+          low light conditions, which is more typical for military planes.
+        </li>
+        <!--conclusion: The performance of image classification with MobileNet depends crucially on the quality and context of the input images and the representativeness of the training data set.-->
+        <br />
+        <strong>Conclusion:</strong> The accurracy of image classification with MobileNet depends heavily on the
+        quality and context of the input images and wether they are part of the training data set.
+
+      </ul>
+    </div>
+  </div>
+
+  <!-- Try Yourself Section -->
+  <div id="try-yourself">
+    <h2 class="text-2xl text-purple-600 font-bold my-4 mx-auto px-4">
+      Try Yourself 🧪
+    </h2>
+    <div class="upload-area border-dashed border-2 border-purple-300 p-6 text-center rounded-xl">
+      <p>
+        Drag your image here or
+        <button class="bg-purple-500 text-white py-2 px-4 rounded-xl hover:bg-purple-600 shadow-md" id="browse-button">
+          Browse
+        </button>
+      </p>
+      <input type="file" id="file-input" class="hidden" accept="image/*" />
+    </div>
+    <!-- Container for user-uploaded images and results -->
+    <div id="try-yourself-container" class="flex mt-4">
+      <div id="image-container"></div>
+    </div>
+  </div>
+
+  <!-- Documentation Section -->
+  <div id="documentation">
+    <h2 class="text-2xl text-purple-600 font-bold my-4 mx-auto px-4">
+      Documentation 📚
+    </h2>
+    <h2 class="text-xl font-semibold text-gray-700 mt-6 my-4 mx-auto px-4">
+      Used Frameworks
+    </h2>
+    <div class="px-4 py-5 sm:px-6 bg-gray-100 shadow-sm rounded-lg">
+      <ul class="list-disc list-inside text-gray-600 space-y-2">
+        <p>
+          <strong>ml5.js: </strong>for image classification. This high-level
+          API provides a user-friendly interface for integrating AI models
+          into web applications without requiring extensive knowledge of
+          TensorFlow.
+        </p>
+        <p>
+          <strong>chart.js: </strong>to visualize the classification
+          results. This library makes it possible to display the confidence
+          values of the classification as a clear pie chart, which gives the
+          user a clear overview of the results.
+        </p>
+        <p>
+          <strong>Tailwind CSS: </strong>to make the styling of my
+          application simple and consistent. With its pre-built classes, I
+          was able to create an appealing layout relatively quickly, without having
+          any prior web knowledge.
+        </p>
+      </ul>
+    </div>
+
+    <hr class="border-gray-300 my-4" />
+
+    <h2 class="text-xl font-semibold text-gray-700 mt-6 my-4 mx-auto px-4">
+      Technical Implementation Details
+    </h2>
+    <p class="standard-text">I did not perform any special image preparation on purpose to test the model's
+      ability to classify
+      authentic images
+      under different conditions. This allowed me to observe which images were recognized better or worse. For the web
+      application creation, which was a new challenge for me, I used the basic functions of the ml5 framework. To ensure
+      a
+      robust user experience, I implemented security measures: File uploads are limited to image files and incorrect
+      entries
+      in the drag-and-drop field trigger an alert, but do not prevent further interactions.
+    </p>
+
+
+    <hr class="border-gray-300 my-4" />
+
+    <h2 class="text-xl font-semibold text-gray-700 mt-6 my-4 mx-auto px-4">
+      Functional Implementation
+    </h2>
+
+    <p class="standard-text">
+      The structure of my project includes several important files: <code>index.html</code> for
+      the basic
+      structure
+      of the website,
+      <code>custom-styles.css</code> for specific style and animation settings such as the loading circle and special
+      hover effects
+      in the
+      navigation bar, <code>navigation.js</code> for controlling the navigation bar and smooth scrolling when selecting
+      website
+      categories,
+      and <code>classificationAndUploadHandling.js</code> for the core functionalities of image classification and
+      handling user
+      uploads
+      including drag-and-drop function.
+    </p>
+
+    <div class="px-4 py-5 sm:px-6 bg-gray-100 shadow-sm rounded-lg">
+      <h2 class="text-lg font-semibold text-gray-600 mt-1 my-4 ">
+        Interaction Flow
+      </h2>
+      <ul class="list-disc list-inside text-gray-600 space-y-2">
+        <p>
+          <strong>File upload: </strong> Users can either select an image by clicking on a button or drag and drop it
+          into the field provided.
+          These
+          interaction options are made possible by the <code>setupFileUploadListener()</code> and
+          <code>setupDragAndDrop()</code> functions.
+        </p>
+        <p>
+          <strong>File type check: </strong> The <code>handleFileSelect()</code> function is called to ensure that the
+          uploaded file is an
+          image. This
+          function
+          also cleans up existing charts, to make room the new one.
+        </p>
+        <p>
+          <strong>Image classification: </strong> After an image has been successfully uploaded, the user is shown a
+          button for image
+          classification. Clicking on this button starts a loading animation and the image classification is initiated
+          by
+          <code>classifyImage()</code>.
+        </p>
+        <p>
+          <strong>Displaying the results: </strong> After receiving the classification results, the loading animation is
+          ended and the result
+          is
+          visualized using <code>displayResults()</code>. This function generates an HTML container containing a pie
+          chart using Chart.js.
+        </p>
+      </ul>
+      <br />
+      <p class="text-gray-600">
+        The same process is used for the six sample images, although some steps such as uploading and file type checking
+        are
+        already predefined, as the images are firmly integrated into the project. Here, <code>classifyImage()</code> is
+        also used for
+        classification and <code>displayResults()</code> for displaying the results, whereby the charts are inserted
+        into prepared HTML
+        containers.
+    </div>
+
+
+    <hr class="border-gray-300 my-4" />
+
+    <h2 class="text-xl font-semibold text-gray-700 mt-6 my-4 mx-auto px-4">
+      UX and HCI aspects
+    </h2>
+
+
+    <p class="standard-text">
+      The design of the application is intuitive and minimalist to enable clear user guidance. The website is designed
+      as a
+      one-pager with a navigation bar that is always visible and allows easy navigation. The website is also optimized
+      for
+      mobile devices, with an adapted navigation bar and dynamic content size adaptation. The interaction areas are
+      clearly
+      highlighted to ensure ease of use. Sources of error for users are minimized and can be corrected through
+      immediate
+      feedback.
+      <br /><br />
+
+      The decision to use pie charts to display the classification results was based on the idea that the aggregated
+      confidence of the classifications should be visualized in an intuitive and easy-to-understand way. I made sure
+      that not
+      only the three classes with the highest confidence are displayed, but also a category “others” is introduced,
+      which
+      shows the remaining percentage up to 100%. This helps to enable a clear and immediate interpretation of the
+      classification results. The probabilities are rounded for a clean display, and where there are multiple possible
+      labels
+      per class, only the first term is displayed to avoid information overload.
+      <br /><br />
+
+      In terms of color, I have chosen a consistent scheme that starts with a characteristic purple that corresponds
+      harmoniously with the ml5 framework. This scheme is strategically designed to provide a pleasing visual experience
+      while
+      supporting user navigation through the application. A custom dummy logo and an emphasized navigation bar complete
+      the
+      design.
+    </p>
+
+
+
+    <!-- Scripts for handling navigation and other functionalities -->
+    <script src="scripts/classificationAndUploadHandling.js"></script>
+    <script src="scripts/navigation.js"></script>
+</body>
+
+</html>
